@@ -1,3 +1,4 @@
+
 # ffmpeg-jni-example
 
 - 使用jni调用ffmpeg编译生成的动态库`.so`，编入apk
@@ -5,7 +6,7 @@
 - jni的实现上使用直接传递ffmpeg command的方式，重写了`ffmpeg.c`的`main()`接口，只需要传入合适的ffmpeg命令即可使用
 
 
-##支持平台##
+## 支持平台
 获取手机cpu平台
 ```
 adb shell cat /proc/cpuinfo
@@ -15,8 +16,8 @@ adb shell cat /proc/cpuinfo
 
 好在是兼容32位的，所以可以编译支持**arm**的库，动态库放置在`$Project/app/src/main/jniLibs/armeabi`，为了兼容32位，**就不能有arm64-v8a目录的存在**
 
-##how to use
-###Step 1
+## how to use
+### Step 1
 编写`FFmpegNativeHelper.java`
 ```
 package com.muqing.android.ffmpeg_jni_example;
@@ -45,7 +46,7 @@ public class FFmpegNativeHelper {
 }
 ```
 
-###Step 2
+### Step 2
 **生成jni cpp header**
 
 ```
@@ -67,7 +68,7 @@ JNIEXPORT jint JNICALL Java_com_muqing_android_ffmpeg_1jni_1example_FFmpegNative
 
 ```
 
-###Step 3
+### Step 3
 **拷贝prebuilt shared libray**</br>
 从我的另一个项目[ffmpeg-for-android-shared-library](https://github.com/tainzhi/ffmpeg-for-android-shared-library)中生成的`include`和`lib`分别拷贝到`$PROJECT/app/src/main/jni/include`和`$PROJECT/app/src/main/jni/prebuilt`目录下
 
@@ -85,7 +86,7 @@ libpostproc/version.h
 ```
 这些文件可以从ffmpeg源码中拷贝之后加以修改
 
-###Step 4
+### Step 4
 **编写Android.mk**
 因为是fork了别人的项目，原始项目支持arm,x86平台，所以它的mk文件是这样的
 ```
@@ -130,19 +131,19 @@ LOCAL_SRC_FILES := com_muqing_android_ffmpeg_jni_example_FFmpegNativeHelper.c \
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/include
 ```
 
-###Step 5
+### Step 5
 ```
 ndk-build 
 ndk-build clean     # if needed, clean the cache, then rebuild
 ```
 
-###Step 6
+### Step 6
 
 在`$Project/app/src/main/java/jni`下生成`libs.armeabi`和`obj.local.armeabi`
 
 拷贝`libs.armeabi`目录下文件到`$Project/app/src/main/jniLibs/armeabi`
 
-###Step 7
+### Step 7
 现在需要补全之前`FFmpegNativeHelper.java`中的lib库
 ```
 public class FFmpegNativeHelper {
@@ -177,7 +178,7 @@ public class FFmpegNativeHelper {
 
 ```
 
-###Step 8
+### Step 8
 在`MainActivity.java`中
 ```
     Sring ffmpegCommand = "ffmpeg --version";>
@@ -186,11 +187,11 @@ public class FFmpegNativeHelper {
 
 
 
-##Todo
+## Todo
 使用gradle把Android.mk集成到Android Studio
 
 - 在`$PROJECT/app/src/main/jni/`下添加c/c++文件即可
 - 配置NDK
 
-##References##
+## References
 - [ffmpeg-jni-sample](https://github.com/dxjia/ffmpeg-jni-sample)
